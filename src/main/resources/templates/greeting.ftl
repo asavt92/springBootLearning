@@ -1,6 +1,6 @@
 <#import "parts/common.ftl" as c>
 
 <@c.page>
-<div>Hello, user</div>
-<a href="/main">Main page</a>
+    <h5>Hello, user</h5>
+    <div>This is simple spring learn project</div>
 </@c.page>
