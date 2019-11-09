@@ -22,6 +22,11 @@
                 <a class="nav-link" href="/user">Users <span class="sr-only">(current)</span></a>
             </li>
             </#if>
+            <#if user??>
+                <li class="nav-item">
+                    <a class="nav-link" href="/user/profile">Profile<span class="sr-only">(current)</span></a>
+                </li>
+            </#if>
         </ul>
 
         <div class="navbar-text mr-3">${name}</div>
