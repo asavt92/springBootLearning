@@ -1,6 +1,9 @@
 package com.example.sweater.domain;
 
+import org.hibernate.validator.constraints.Length;
+
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 
 @Entity
 public class Message {
@@ -12,7 +15,8 @@ public class Message {
     @JoinColumn(name = "user_id")
     private User author;
 
-
+    @NotBlank(message = "Please fill message!")
+    @Length(max = 4096, message = "Too long message!")
     private String text;
     private String tag;
     private String filename;

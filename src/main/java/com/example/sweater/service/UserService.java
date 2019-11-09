@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -21,10 +22,13 @@ public class UserService implements UserDetailsService {
 
     private final MailSenderService mailSenderService;
 
+    private final PasswordEncoder passwordEncoder;
+
     @Autowired
-    public UserService(UserRepo userRepo, MailSenderService mailSenderService) {
+    public UserService(UserRepo userRepo, MailSenderService mailSenderService, PasswordEncoder passwordEncoder) {
         this.userRepo = userRepo;
         this.mailSenderService = mailSenderService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -45,6 +49,7 @@ public class UserService implements UserDetailsService {
         user.setActive(true);
         user.setRoles(Collections.singleton(Role.USER));
         user.setActivationCode(UUID.randomUUID().toString());
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
 
         userRepo.save(user);
         sendMessage(user);
@@ -100,18 +105,19 @@ public class UserService implements UserDetailsService {
         String usrEmail = user.getEmail();
         boolean isEmailChanged = (!StringUtils.isEmpty(email) && !email.equals(usrEmail)) || (!StringUtils.isEmpty(usrEmail) && !usrEmail.equals(email));
 
-        if (isEmailChanged){
+        if (isEmailChanged) {
             user.setEmail(email);
 
             user.setActivationCode(UUID.randomUUID().toString());
         }
 
-        if (!StringUtils.isEmpty(password)){
-            user.setPassword(password);
+        if (!StringUtils.isEmpty(password)) {
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+
         }
 
         userRepo.save(user);
-        if (isEmailChanged){
+        if (isEmailChanged) {
 
             sendMessage(user);
         }

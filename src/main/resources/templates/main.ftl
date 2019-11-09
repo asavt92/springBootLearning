@@ -17,14 +17,20 @@
         Add new message
     </a>
 
-    <div class="collapse" id="collapseSendMessageForm">
+    <div class="collapse <#if message??>show</#if> " id="collapseSendMessageForm">
         <div class="form-group mt-3">
             <form method="post" enctype="multipart/form-data">
                 <div class="form-group">
-                    <input class="form-control" type="text" name="text" placeholder="Введите сообщение"/>
+                    <input class="form-control ${(textError??)?string('is-invalid','')} " value="<#if message??>${message.text}</#if> " type="text" name="text" placeholder="Введите сообщение"/>
+                    <#if textError??>
+                        <div class="invalid-feedback">
+                            ${textError}
+                        </div>
+
+                    </#if>
                 </div>
                 <div class="form-group">
-                    <input class="form-control" type="text" name="tag" placeholder="Тэг">
+                    <input class="form-control" type="text" name="tag" placeholder="Тэг"  value="<#if message??>${message.tag}</#if>">
                 </div>
                 <div class="form-group">
 
