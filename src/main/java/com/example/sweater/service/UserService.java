@@ -52,7 +52,12 @@ public class UserService implements UserDetailsService {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
         userRepo.save(user);
-        sendMessage(user);
+        try {
+            /*TODO get correct mail auth params*/
+            sendMessage(user);
+        } catch (Exception e) {
+            ;
+        }
 
         return true;
     }
